@@ -17,7 +17,25 @@ WORK_DIR=$PWD
 #PROJECT_DIR="/root/XinFin/XDPoS-TestNet-Apothem"
 cd $PROJECT_DIR && make XDC
 cd $WORK_DIR
+mkdir -p keys
+numMN=4
 
+<<<<<<< HEAD
+for ((i= 1;i<= $numMN;i++)){
+  echo $i
+  if [ ! -d ./nodes/$i/$Bin_NAME/chaindata ]
+  then
+    key=PRIVATE_KEY_$i
+    echo "${!key}" > keys/PRIVATE_KEY_$i.txt
+    wallet[$i]=$(${PROJECT_DIR}/build/bin/$Bin_NAME account import --password .pwd --datadir ./nodes/$i ./keys/PRIVATE_KEY_$i.txt | awk -v FS="({|})" '{print $2}')
+    ${PROJECT_DIR}/build/bin/$Bin_NAME --datadir ./nodes/$i init ./genesis/genesis.json
+  else
+    wallet[$i]=$(${PROJECT_DIR}/build/bin/$Bin_NAME account list --datadir ./nodes/$i | head -n 1 | awk -v FS="({|})" '{print $2}')
+  fi
+
+  echo "[*] wallet $i = ${wallet[$i]}" 
+}
+=======
 if [ ! -d ./nodes/1/$Bin_NAME/chaindata ]
 then
   echo $PRIVATE_KEY_1 > PRIVATE_KEY_1.txt
@@ -34,6 +52,7 @@ else
   wallet2=$(${PROJECT_DIR}/build/bin/$Bin_NAME account list --datadir ./nodes/2 | head -n 1 | awk -v FS="({|})" '{print $2}')
   wallet3=$(${PROJECT_DIR}/build/bin/$Bin_NAME account list --datadir ./nodes/3 | head -n 1 | awk -v FS="({|})" '{print $2}')
 fi
+>>>>>>> master
 
 echo $wallet1
 VERBOSITY=3
@@ -45,7 +64,10 @@ GASPRICE="1"
 #child_proc=$! 
 
 echo Starting the nodes ...
+<<<<<<< HEAD
+=======
 numMN=3
+>>>>>>> master
 for ((i= 1;i<= $numMN;i++)){
   echo $i
   ${PROJECT_DIR}/build/bin/$Bin_NAME \
@@ -58,7 +80,11 @@ for ((i= 1;i<= $numMN;i++)){
     --rpccorsdomain "*" \
     --ws --wsaddr="0.0.0.0" \--wsorigins "*" --wsport $((8554+$i)) \
     --rpcaddr 0.0.0.0 --rpcport $((8544+$i)) --rpcvhosts "*" \
+<<<<<<< HEAD
+    --unlock ${wallet[$i]} \
+=======
     --unlock $((wallet$i)) \
+>>>>>>> master
     --password ./.pwd \
     --mine \
     --gasprice "${GASPRICE}" \
