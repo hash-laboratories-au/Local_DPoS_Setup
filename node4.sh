@@ -40,7 +40,7 @@ ${PROJECT_DIR}/build/bin/$Bin_NAME \
   --syncmode "full" \
   --datadir ./nodes/4 \
   --networkid "${networkid}" \
-  --port 30306 \
+  --port 30309 \
   --rpc \
   --rpccorsdomain "*" \
   --ws \
