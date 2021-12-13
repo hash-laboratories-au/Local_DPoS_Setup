@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 _interupt() { 
     echo "Shutdown $child_proc"
     kill -TERM $child_proc
@@ -20,7 +20,8 @@ cd $WORK_DIR
 
 if [ ! -d ./nodes/1/$Bin_NAME/chaindata ]
 then
-  wallet1=$(${PROJECT_DIR}/build/bin/$Bin_NAME account import --password .pwd --datadir ./nodes/1 <(echo ${PRIVATE_KEY_1}) | awk -v FS="({|})" '{print $2}')
+  echo $PRIVATE_KEY_1 >> /tmp/key1
+  wallet1=$(${PROJECT_DIR}/build/bin/$Bin_NAME account import --password .pwd --datadir ./nodes/1 /tmp/key1 | awk -v FS="({|})" '{print $2}')
   ${PROJECT_DIR}/build/bin/$Bin_NAME --datadir ./nodes/1 init ./genesis/genesis.json
 else
   wallet1=$(${PROJECT_DIR}/build/bin/$Bin_NAME account list --datadir ./nodes/1 | head -n 1 | awk -v FS="({|})" '{print $2}')
@@ -56,6 +57,7 @@ ${PROJECT_DIR}/build/bin/$Bin_NAME \
   --gasprice "${GASPRICE}" \
   --targetgaslimit "420000000" \
   --verbosity ${VERBOSITY} \
+  --ipcdisable \
   --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,XDPoS
   # --ethstats "XinFin-MasterNode-01:xinfin_test_network_stats@stats_testnet.xinfin.network:3000"
 # child_proc="$child_proc $!"

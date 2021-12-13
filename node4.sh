@@ -19,8 +19,9 @@ cd $PROJECT_DIR && make all
 cd $WORK_DIR
 
 if [ ! -d ./nodes/4/$Bin_NAME/chaindata ]
-then
-  wallet4=$(${PROJECT_DIR}/build/bin/$Bin_NAME account import --password .pwd --datadir ./nodes/4 <(echo ${PRIVATE_KEY_4}) | awk -v FS="({|})" '{print $2}')
+then 
+  echo $PRIVATE_KEY_4 >> /tmp/key4
+  wallet4=$(${PROJECT_DIR}/build/bin/$Bin_NAME account import --password .pwd --datadir ./nodes/4 /tmp/key4 | awk -v FS="({|})" '{print $2}')
   ${PROJECT_DIR}/build/bin/$Bin_NAME --datadir ./nodes/4 init ./genesis/genesis.json
 else
   wallet4=$(${PROJECT_DIR}/build/bin/$Bin_NAME account list --datadir ./nodes/4 | head -n 1 | awk -v FS="({|})" '{print $2}')
@@ -56,6 +57,7 @@ ${PROJECT_DIR}/build/bin/$Bin_NAME \
   --gasprice "${GASPRICE}" \
   --targetgaslimit "420000000" \
   --verbosity ${VERBOSITY} \
+  --ipcdisable \
   --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,XDPoS
   # --ethstats "XinFin-MasterNode-01:xinfin_test_network_stats@stats_testnet.xinfin.network:3000"
 # child_proc="$child_proc $!"
