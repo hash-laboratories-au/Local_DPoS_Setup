@@ -27,7 +27,7 @@ else
 fi
 echo "wallet1: $wallet1"
 
-VERBOSITY=3
+VERBOSITY=4
 GASPRICE="1"
 
 #echo Starting the bootnode ...
